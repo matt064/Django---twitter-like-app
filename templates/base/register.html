@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    {% if not request.user.is_authenticated %}
+        <div>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Register</button>
+                <p>
+                    Already have an account? <a href="{% url 'base:login' %}">Login</a>
+                </p>
+            </form>
+        </div>
+    {% else %}
+        <p>You are already logged in and cannot register. Would you like to <a href="{% url 'base:logout' %}">Logout</a></p>
+    {% endif %}
+{% endblock %}

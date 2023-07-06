@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+{% if not request.user.is_authenticated %}
+    <div class="column">
+        <div class="block">
+            <h4 class="title is-2"> All Tweets:</h4>
+        </div>
+        {% for tweet in tweets %}
+            <div class="box">
+                {{ tweet.body }}
+                <span class="is-small has-text-grey-light">
+                    {{ tweet.created_at }} by {{ tweet.user.username }}
+                </span>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="block">
+        <div class="block">
+            <a href="{% url 'base:login' %}">
+                <button class="button is-dark is-outlined is-fullwidth">
+                    Login
+                </button>
+            </a>
+        </div>
+        <div class="block">
+            <a href="{% url 'base:register' %}">
+                <button class="button is-success is-light is-outlined is-fullwidth">
+                    Register
+                </button>
+            </a>
+        
+        </div>
+    </div>
+
+{% else %}
+    <div class="column">
+        <div class="block">
+            <h4 class="title is-2">Tweets from users you follow: </h4>
+        </div>
+        {% for tweet in tweets %}
+            <div class="box">
+                {{ tweet.body }}
+                <span class="is-small has-text-grey-light">
+                    {{ tweet.created_at }} by {{ tweet.user.username }}
+                </span>
+                {% if request.user == tweet.user %}
+                <a href="{% url 'base:delete' tweet.id %}">
+                    <button class="button is-danger is-small">Delete</button>
+                </a> 
+                {% endif %}
+            </div>
+        {% endfor %}
+
+    </div>
+
+    <div class="block">
+        <div class="block">
+            <a href="{% url 'base:profile_list' %}">
+                <button class="button is-dark is-outlined is-fullwidth">
+                    All Profiles
+                </button>
+            </a>
+        </div>
+        <div class="block">
+            <a href="{% url 'base:profile' request.user.profile.id %}">
+                <button class="button is-success is-light is-outlined is-fullwidth">
+                    My Profile
+                </button>
+            </a>
+        </div>
+        <div class="block">
+            <a href="{% url 'base:logout' %}">
+                <button class="button is-dark is-outlined is-fullwidth">
+                    Logout
+                </button>
+            </a>
+        
+        </div>
+        <div class="block">
+            <h2 class="title is-2">Add a Tweet</h2>
+        </div>
+
+        <div class="block">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="button is-success is-fullwidth is-medium mt-5" type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    {% if not request.user.is_authenticated %}
+    <div>
+        <form method="POST">
+            {% csrf_token %}
+            <div>
+                <label for="username">Username</label>
+                <input id="username" name="username" type="text" placeholder="Write your username" required="True">
+            </div>
+            <div>
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;">
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <p>Need an account? <a href="{% url 'base:register' %}"> Register</a></p>
+    </div>
+    {% else %}
+        <p>You already logged in. Would you like to <a href="{% url 'base:logout' %}">Logout</a></p>    
+    {% endif %}
+
+{% endblock %}
